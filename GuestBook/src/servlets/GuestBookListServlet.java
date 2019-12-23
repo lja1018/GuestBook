@@ -1,28 +1,29 @@
-package spms.servlets;
+package servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import vo.GuestBook;
+
+//예외 발생 시 Error.jsp로 포워딩 
 @WebServlet("/list")
 public class GuestBookListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	protected void doGet(
+	public void doGet(
 			HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -45,22 +46,29 @@ public class GuestBookListServlet extends HttpServlet {
 					" order by modify_date desc");
 			
 			response.setContentType("text/html; charset=UTF-8");
-			PrintWriter out = response.getWriter();
-			
-			out.println("<html><head><title>방명록 목록</title></head>");
-			out.println("<body><h1>방명록 목록</h1>");
-			out.println("<p><a href='add'>방명록 등록</a></p>");
+			ArrayList<GuestBook> guestbooks = new ArrayList<GuestBook>();
+
+			// 데이터베이스에서 방명록 목록을 가져와 GuestBook에 담는다.
+			// 그리고 GuestBook객체를 ArrayList에 추가한다.
 			while(rs.next()) {
-				out.println(
-					"Email : " + "<a href='update?email=" + rs.getString("email") + "'></a><br>" +
-					"Contents : " + rs.getString("contents") + "<br>" + 
-					"create : " + rs.getDate("create_date") + "<br>" +
-					"modify : " + rs.getDate("modify_date") + "<br><br><br><br><br>"
-				);
+				guestbooks.add(new GuestBook()
+							.setEmail(rs.getString("email"))
+							.setPassword(rs.getString("pwd"))
+							.setContents(rs.getString("contents"))
+							.setCreatedDate(rs.getDate("create_date"))
+							.setModifiedDate(rs.getDate("modify_date")));
 			}
-			out.println("</body></html>");
+
+			// request에 방명록 데이터를 보관한다.
+			request.setAttribute("guestbooks", guestbooks);
+			
+			// JSP로 출력을 위임한다.
+			RequestDispatcher rd = request.getRequestDispatcher("/list/GuestBookList.jsp");
+			rd.include(request, response);
 		} catch (Exception e) {
-			throw new ServletException(e);
+			request.setAttribute("error", e);
+			RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
+			rd.forward(request, response);
 			
 		} finally {
 			try {if (rs != null) rs.close();} catch(Exception e) {}

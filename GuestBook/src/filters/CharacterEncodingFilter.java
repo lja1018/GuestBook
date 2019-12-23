@@ -1,4 +1,4 @@
-package spms.filters;
+package filters;
 
 import java.io.IOException;
 
