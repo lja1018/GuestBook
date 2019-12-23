@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/member/list")
+@WebServlet("/list")
 public class GuestBookListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -25,6 +25,7 @@ public class GuestBookListServlet extends HttpServlet {
 	protected void doGet(
 			HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -37,25 +38,24 @@ public class GuestBookListServlet extends HttpServlet {
 					sc.getInitParameter("username"),
 					sc.getInitParameter("password"));
 			stmt = conn.createStatement();
+			
 			rs = stmt.executeQuery(
-					"SELECT MNO,MNAME,EMAIL,CRE_DATE" + 
-					" FROM MEMBERS" +
-					" ORDER BY MNO ASC");
+					"select email, pwd, contents, create_date, modify_date" + 
+					" from guestbooks" +
+					" order by modify_date desc");
 			
 			response.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = response.getWriter();
-			out.println("<html><head><title>회원목록</title></head>");
-			out.println("<body><h1>회원목록</h1>");
-			out.println("<p><a href='add'>신규 회원</a></p>");
+			
+			out.println("<html><head><title>방명록 목록</title></head>");
+			out.println("<body><h1>방명록 목록</h1>");
+			out.println("<p><a href='add'>방명록 등록</a></p>");
 			while(rs.next()) {
 				out.println(
-					rs.getInt("MNO") + "," +
-					"<a href='update?no=" + rs.getInt("MNO") + "'>" +
-					rs.getString("MNAME") + "</a>," +
-					rs.getString("EMAIL") + "," + 
-					rs.getDate("CRE_DATE") +
-					"<a href='delete?no=" + rs.getInt("MNO") + 
-					"'> [삭제]</a><br>"
+					"Email : " + "<a href='update?email=" + rs.getString("email") + "'></a><br>" +
+					"Contents : " + rs.getString("contents") + "<br>" + 
+					"create : " + rs.getDate("create_date") + "<br>" +
+					"modify : " + rs.getDate("modify_date") + "<br><br><br><br><br>"
 				);
 			}
 			out.println("</body></html>");
