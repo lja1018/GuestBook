@@ -28,10 +28,8 @@ public class GuestBookListServlet extends HttpServlet {
 
 		try {
 			ServletContext sc = this.getServletContext();
-			Connection conn = (Connection)sc.getAttribute("conn");
 			
-			GuestBookDao guestbookDao = new GuestBookDao();
-			guestbookDao.setConnection(conn);
+			GuestBookDao guestbookDao = (GuestBookDao)sc.getAttribute("guestbookDao");
 			
 			request.setAttribute("guestbooks", guestbookDao.selectList());
 			response.setContentType("text/html; charset=UTF-8");
