@@ -25,17 +25,20 @@ public class GuestBookDao {
 		try {
 			stmt = connection.createStatement();
 			rs = stmt.executeQuery(
-					"select email, contents, create_date" + 
+					"select *" + 
 					" from guestbooks" + 
-					" order by create_date desc");
+					" order by gno desc");
 			
 			ArrayList<GuestBook> guestbooks = new ArrayList<GuestBook>();
 			
 			while (rs.next()) {
 				guestbooks.add(new GuestBook()
+						.setNo(rs.getInt("gno"))
 						.setEmail(rs.getString("email"))
 						.setContents(rs.getString("contents"))
-						.setCreatedDate(rs.getDate("create_date")) );
+						.setPassword(rs.getString("pwd"))
+						.setCreatedDate(rs.getDate("create_date"))
+						.setModifiedDate(rs.getDate("modify_date")) );
 			}
 			
 			return guestbooks;
