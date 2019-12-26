@@ -15,13 +15,13 @@
 <br>
 <form action='update' method='post'>
 <input type='hidden' name='no' value='${requestScope.guestbook.no}'>
-이메일 : <input type='text' name='email' value='${requestScope.guestbook.email}'><br>
-비밀번호 : <input type='password' name='password'><br>
-내용 : <input type='text' name='contents' value='${requestScope.guestbook.contents}'><br>
-등록일 : ${requestScope.guestbook.createdDate}<br>
-수정일 : ${requestScope.guestbook.modifiedDate}<br>
+<input type='text' name='email' placeholder="이메일" value='${requestScope.guestbook.email}' maxlength="40" readonly="readonly"><br><br>
+<input type='password' name='password' placeholder="비밀번호" maxlength="100"><br><br>
+<textarea name='contents' cols=70 rows=4 placeholder="내용" maxlength="148" value='${requestScope.guestbook.contents}'></textarea><br><br>
+등록일 : ${requestScope.guestbook.createdDate}<br><br>
+수정일 : ${requestScope.guestbook.modifiedDate}<br><br>
 <input type='submit' value='저장'>
-<input type='button' value='삭제' onclick='location.href="delete?no=${requestScope.guestbook.no}";'>
+<input type='button' value='삭제' onclick='location.href="delete?no=${requestScope.guestbook.no}"'>
 <input type='button' value='취소' onclick='location.href="list"'>
 </form>
 <br>
