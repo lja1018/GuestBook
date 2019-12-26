@@ -49,6 +49,12 @@ public class GuestBookUpdateServlet extends HttpServlet {
 			
 			GuestBookDao guestbookDao = (GuestBookDao)sc.getAttribute("guestbookDao");
 			
+			if (request.getParameter("existpassword") != request.getParameter("inputpassword")) {
+				RequestDispatcher rd = request.getRequestDispatcher("/PasswordError.jsp");
+				rd.forward(request, response);
+				return;
+			}
+			
 			guestbookDao.update(new GuestBook()
 					.setNo(Integer.parseInt(request.getParameter("no")))
 					.setContents(request.getParameter("contents")) );			
