@@ -1,4 +1,4 @@
-<%@page
+<%@ page
 	language="java"
 	contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -14,11 +14,8 @@
 <jsp:include page="/Header.jsp"/>
 <p><a href='add'>방명록 등록</a></p>
 <c:forEach var="guestbook" items="${guestbooks}">
-${guestbook.no},
-<a href='update?no=${guestbook.no}'>${guestbook.contents}</a>,
-${guestbook.email},
-${guestbook.createdDate}
-<a href='delete?no=${guestbook.no}'>[삭제]</a><br>
+${guestbook.email} <a href='update?no=${guestbook.no}'>[수정]</a><br>
+<font size="6">${guestbook.contents}</font><br><br>
 </c:forEach>
 <jsp:include page="/Tail.jsp"/>
 </body>

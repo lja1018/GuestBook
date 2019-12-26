@@ -127,14 +127,16 @@ public class GuestBookDao {
 	    try {
 			connection = ds.getConnection();
 	    	stmt = connection.createStatement();
-	    	rs = stmt.executeQuery("select email, contents, modify_date, gno from guestbooks where gno=" + no);
+	    	rs = stmt.executeQuery("select * from guestbooks where gno=" + no);
 	    	
 	    	if (rs.next()) {
 	    		return new GuestBook()
 	    				.setNo(rs.getInt("gno"))
 	    				.setEmail(rs.getString("email"))
 	    				.setContents(rs.getString("contents"))
-	    				.setCreatedDate(rs.getDate("modify_date"));
+	    				.setPassword(rs.getString("pwd"))
+	    				.setCreatedDate(rs.getDate("create_date"))
+	    				.setModifiedDate(rs.getDate("modify_date"));
 	    		
 	    	} else {
 	    		throw new Exception("해당 번호의 회원을 찾을 수 없습니다.");	
