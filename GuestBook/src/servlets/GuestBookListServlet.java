@@ -1,11 +1,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -16,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.GuestBookDao;
-import vo.GuestBook;
 
 // 예외 발생 시 Error.jsp로 포워딩 
 @WebServlet("/list")
@@ -35,7 +29,7 @@ public class GuestBookListServlet extends HttpServlet {
 			response.setContentType("text/html; charset=UTF-8");
 			
 			// JSP로 출력을 위임한다.
-			RequestDispatcher rd = request.getRequestDispatcher("/list/GuestBookList.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/guestbook/GuestBookList.jsp");
 			rd.include(request, response);
 			
 		} catch (Exception e) {
