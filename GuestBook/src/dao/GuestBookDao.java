@@ -55,7 +55,7 @@ public class GuestBookDao {
 		}
 	}
 	
-	public int insert(GuestBook guestbook) throws Exception {
+	public int insert(GuestBook gb) throws Exception {
 		Connection connection = null;
 		PreparedStatement stmt = null;
 		
@@ -65,9 +65,9 @@ public class GuestBookDao {
 					"insert into guestbooks(email, pwd, contents, create_date, modify_date)" + 
 					" values (?, ?, ?, now(), now())" );
 					
-			stmt.setString(1, guestbook.getEmail());
-			stmt.setString(2, guestbook.getPassword());
-			stmt.setString(3, guestbook.getContents());
+			stmt.setString(1, gb.getEmail());
+			stmt.setString(2, gb.getPassword());
+			stmt.setString(3, gb.getContents());
 			
 			return stmt.executeUpdate();
 			
