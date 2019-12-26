@@ -25,7 +25,6 @@ public class GuestBookListServlet extends HttpServlet {
 			
 			GuestBookDao guestbookDao = (GuestBookDao)sc.getAttribute("guestbookDao");
 			
-			// test
 			request.setAttribute("guestbooks", guestbookDao.selectList());
 			response.setContentType("text/html; charset=UTF-8");
 			

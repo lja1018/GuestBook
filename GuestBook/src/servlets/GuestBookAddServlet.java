@@ -19,7 +19,7 @@ public class GuestBookAddServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("/guestbook/GuestBookForm.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/guestbook/GuestBookAddForm.jsp");
 		rd.forward(request, response);
 	}
 	
