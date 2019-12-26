@@ -1,7 +1,10 @@
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="java.util.regex.Matcher" %>
 <%@ page 
 	language="java" 
 	contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -30,3 +33,16 @@
 <jsp:include page="/Tail.jsp"/>
 </body>
 </html>
+
+<%!
+public static boolean isValidEmail(String email) {
+	boolean ret = false;
+	String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+	Pattern p = Pattern.compile(regex);
+	Matcher m = p.matcher(email);
+	
+	if(m.matches()) ret = true;
+
+	return ret;
+}
+%>
