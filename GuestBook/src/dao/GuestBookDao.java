@@ -7,16 +7,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletContext;
+import javax.sql.DataSource;
 
-import util.DBConnectionPool;
 import vo.GuestBook;
 
 public class GuestBookDao {
-	DBConnectionPool connPool;
+	DataSource ds;
 	
-	public void setDbConnectionPool(DBConnectionPool connPool) {
-		this.connPool = connPool;
+	public void setDataSource(DataSource ds) {
+		this.ds = ds;
 	}
 
 	public List<GuestBook> selectList() throws Exception {
@@ -25,7 +24,7 @@ public class GuestBookDao {
 		ResultSet rs = null;
 		
 		try {
-			connection = connPool.getConnection();
+			connection = ds.getConnection();
 			stmt = connection.createStatement();
 			rs = stmt.executeQuery(
 					"select *" + 
@@ -52,7 +51,7 @@ public class GuestBookDao {
 		} finally {
 			try {if (rs != null) rs.close();} catch (Exception e) {}
 			try {if (stmt != null) stmt.close();} catch (Exception e) {}
-			if (connection != null) connPool.returnConnection(connection);
+			try	{if (connection != null) connection.close();} catch (Exception e) {}
 		}
 	}
 	
@@ -61,7 +60,7 @@ public class GuestBookDao {
 		PreparedStatement stmt = null;
 		
 		try {
-			connection = connPool.getConnection();
+			connection = ds.getConnection();
 			stmt = connection.prepareStatement(
 					"insert into guestbooks(email, pwd, contents, create_date, modify_date)" + 
 					" values (?, ?, ?, now(), now())" );
@@ -77,7 +76,7 @@ public class GuestBookDao {
 			
 		} finally {
 			try {if (stmt != null) stmt.close();} catch (Exception e) {}
-			if (connection != null) connPool.returnConnection(connection);
+			try	{if (connection != null) connection.close();} catch (Exception e) {}
 		}
 	}
 	
@@ -86,7 +85,7 @@ public class GuestBookDao {
 		Statement stmt = null;
 		
 		try {
-			connection = connPool.getConnection();
+			connection = ds.getConnection();
 			stmt = connection.createStatement();
 			return stmt.executeUpdate("delete from guestbooks where gno=" + no);
 		
@@ -95,7 +94,7 @@ public class GuestBookDao {
 			
 		} finally {
 			try {if (stmt != null) stmt.close();} catch(Exception e) {}
-			if (connection != null) connPool.returnConnection(connection);
+			try	{if (connection != null) connection.close();} catch (Exception e) {}
 		}
 	}
 	
@@ -104,7 +103,7 @@ public class GuestBookDao {
 		PreparedStatement stmt = null;
 		
 	    try {
-	    	connection = connPool.getConnection();
+			connection = ds.getConnection();
 	    	stmt = connection.prepareStatement("update guestbooks set contents=?, modify_date=now() where gno=?");
 	    	stmt.setString(1, guestbook.getContents());
 	    	stmt.setString(2, Integer.toString(guestbook.getNo()));
@@ -116,7 +115,7 @@ public class GuestBookDao {
 
 	    } finally {
 	    	try {if (stmt != null) stmt.close();} catch (Exception e) {}
-	    	if (connection != null) connPool.returnConnection(connection);
+			try	{if (connection != null) connection.close();} catch (Exception e) {}
 	    }
 	}
 	
@@ -126,7 +125,7 @@ public class GuestBookDao {
 	    ResultSet rs = null;
 	    
 	    try {
-	    	connection = connPool.getConnection();
+			connection = ds.getConnection();
 	    	stmt = connection.createStatement();
 	    	rs = stmt.executeQuery("select email, contents, modify_date, gno from guestbooks where gno=" + no);
 	    	
@@ -147,7 +146,7 @@ public class GuestBookDao {
 	    } finally {
 	    	try {if (rs != null) rs.close();} catch(Exception e) {}
 	    	try {if (stmt != null) stmt.close();} catch(Exception e) {}
-	    	if (connection != null) connPool.returnConnection(connection);
+			try	{if (connection != null) connection.close();} catch (Exception e) {}
 	    }
 	}
 }
