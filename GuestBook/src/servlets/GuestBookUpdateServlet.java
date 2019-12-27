@@ -56,11 +56,6 @@ public class GuestBookUpdateServlet extends HttpServlet {
 				rd.forward(request, response);
 				return;
 			}
-			if (!isValidEmail(request.getParameter("email"))) {
-				RequestDispatcher rd = request.getRequestDispatcher("/EmailError.jsp");
-				rd.forward(request, response);
-				return;
-			}
 			
 			guestbookDao.update(new GuestBook()
 					.setNo(Integer.parseInt(request.getParameter("no")))
@@ -77,16 +72,5 @@ public class GuestBookUpdateServlet extends HttpServlet {
 		}
 		
 	}
-	
-	public static boolean isValidEmail(String email) {
-		boolean ret = false;
-		String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
-		Pattern p = Pattern.compile(regex);
-		Matcher m = p.matcher(email);
-		
-		if(m.matches()) ret = true;
-
-		return ret;
-	}
-	
+			
 }
