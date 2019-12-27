@@ -1,6 +1,8 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -31,6 +33,12 @@ public class GuestBookAddServlet extends HttpServlet {
 			
 			GuestBookDao guestbookDao = (GuestBookDao)sc.getAttribute("guestbookDao");
 			
+			if (!isValidEmail(request.getParameter("email"))) {
+				RequestDispatcher rd = request.getRequestDispatcher("/EmailError.jsp");
+				rd.forward(request, response);
+				return;
+			}
+			
 			guestbookDao.insert(new GuestBook()
 					.setEmail(request.getParameter("email"))
 					.setPassword(request.getParameter("password"))
@@ -47,4 +55,17 @@ public class GuestBookAddServlet extends HttpServlet {
 		}
 		
 	}
+	
+	// Email Validation 검사
+	public static boolean isValidEmail(String email) {
+		boolean ret = false;
+		String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(email);
+		
+		if(m.matches()) ret = true;
+
+		return ret;
+	}
+	
 }
